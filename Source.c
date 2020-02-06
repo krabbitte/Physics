@@ -10,10 +10,10 @@
 #define accmag point.acc.x * point.acc.x + point.acc.y * point.acc.y
 #define setpointfield(a,b) point.a.x = b; point.acc.y = b;
 
-
 int updatepos();
 int checkforces();
 int clearforce();
+int clearscreen();
 
 typedef struct force {
 	double x, y;
@@ -41,19 +41,18 @@ typedef struct object {
 obj point;
 double interval;
 double acc, vel, angle;
+force force1, force2;
 
 int main()
 {
 	int time = 0;
 
-	interval = 1;
+	interval = 10;
 
-	force force1, force2;
-
-	force1.angle = 40;
-	force1.magnitude = 6;
-	force2.angle = 270;
-	force2.magnitude = 5;
+	force1.angle = 90;
+	force1.magnitude = 5;
+	force2.angle = 0;
+	force2.magnitude = 0;
 
 	while (time < sec(30.0))
 	{
@@ -64,8 +63,7 @@ int main()
 			setpointfield(acc, 0);
 		}
 
-		point.forces[0] = force1;
-		point.forces[1] = force2;
+		checkforces();
 
 		for (int i = 0; i < 20; i++)
 		{
@@ -75,7 +73,8 @@ int main()
 
 		if (fmod(time, sec(1)) == 0)
 		{
-			printf("Time: %0.3f\tVel = %0.3f\tAcc = %0.3f\t(%0.2f , %0.2f)\n", (double)time * SLEEPRATIO, sqrt(velmag), sqrt(accmag), point.x, point.y);
+			clearscreen();
+			printf("Time: %0.3f\tVel = %0.3f\tAcc = %0.3f\t(%0.2f , %0.2f)", (double)time * SLEEPRATIO, sqrt(velmag), sqrt(accmag), point.x, point.y);
 		}
 
 		Sleep(interval);
@@ -112,7 +111,31 @@ int clearforce()
 	return 0;
 }
 
+int clearscreen()
+{
+	for (int i = 0; i < 300; i++)
+	{
+		if (i < 100)
+		{
+			printf("\b");
+		}
+		else if (i > 99 && i < 200)
+		{
+			printf(" ");
+		}
+		else
+			printf("\b");
+	}
+
+	return 0;
+}
+
 int checkforces()
 {
-	
+	/*Add system for adding forces by distance from point*/
+
+	point.forces[0] = force1;
+	point.forces[1] = force2;
+
+	return 0;
 }
