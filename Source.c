@@ -22,6 +22,7 @@ typedef struct force {
 	double radius;
 }force;
 
+//cools
 typedef struct acceleration {
 	double x, y;
 }acceleration;
